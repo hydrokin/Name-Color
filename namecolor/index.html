@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Name Color</title>
+    <link rel="icon" href="ico.svg" type="image/svg+xml">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.3s ease;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+            text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.8);
+        }
+
+        #inputContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            width: 80%;
+        }
+
+        #inputWord {
+            display: inline-block;
+            outline: none;
+            cursor: pointer;
+            font-size: 18px;
+            line-height: 1;
+            border-radius: 500px;
+            transition-property: background-color, border-color, color, box-shadow, filter;
+            transition-duration: 0.3s;
+            border: 1px solid transparent;
+            letter-spacing: 2px;
+            min-width: 160px;
+            text-transform: uppercase;
+            white-space: normal;
+            font-weight: 700;
+            text-align: center;
+            padding: 8px 48px;
+
+            height: 48px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            width: 100%;
+        }
+
+        #inputWord::placeholder {
+            color: #ccc;
+        }
+
+        #inputWord:hover {
+            background-color: #21e065;
+        }
+
+        #hexColor {
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+        }
+
+        /* CSS for the Download button */
+        #downloadButtonContainer {
+            display: flex;
+            gap: 4px;
+            margin-top: 10px;
+        }
+
+        .downloadButton {
+            display: inline-block;
+            outline: 0;
+            cursor: pointer;
+            border: 2px solid #000;
+            border-radius: 3px;
+            color: #fff;
+            background: #000;
+            font-size: 20px;
+            font-weight: 600;
+            line-height: 28px;
+            padding: 12px 20px;
+            text-align: center;
+            transition-duration: .15s;
+            transition-property: all;
+            transition-timing-function: cubic-bezier(.4,0,.2,1);
+            width: 50%;
+        }
+
+        .downloadButton:hover {
+            color: #000;
+            background: rgb(255, 218, 87);
+        }
+
+        /* Styles for the Donate button */
+        #donateButton {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 9999;
+        }
+
+        #donateButton a {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #f44336;
+            color: #ffffff;
+            font-size: 16px;
+            text-decoration: none;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #donateButton a:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Mobil Görünüm */
+        @media screen and (max-width: 480px) {
+            body {
+                padding: 20px;
+            }
+
+            #inputWord {
+                font-size: 16px;
+            }
+
+            #downloadButtonContainer {
+                flex-direction: column;
+            }
+
+            .downloadButton {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+   <script>
+        function setInitialBackgroundColor() {
+            var initialColor = "#000000";
+            document.body.style.backgroundColor = initialColor;
+
+            var inverseColor = getInverseColor(initialColor);
+            document.getElementById('inputWord').style.backgroundColor = inverseColor;
+            document.getElementById('inputWord').style.color = initialColor;
+            document.getElementById('title').style.color = inverseColor;
+        }
+
+        window.onload = setInitialBackgroundColor;
+        document.addEventListener('contextmenu', function (e) {
+        e.preventDefault();
+    });
+        
+
+
+
+
+            function convertToHexColor() {
+            var word = document.getElementById('inputWord').value;
+
+            // Limit input to 16 characters
+            if (word.length > 16) {
+                document.getElementById('inputWord').value = word.slice(0, 16);
+            }
+
+            var hash = 0;
+            for (var i = 0; i < word.length; i++) {
+                hash = word.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            var color = '#';
+            for (var j = 0; j < 3; j++) {
+                var value = (hash >> (j * 8)) & 255;
+                color += ('00' + value.toString(16)).substr(-2);
+            }
+            document.body.style.backgroundColor = color;
+
+            var inverseColor = getInverseColor(color);
+            document.getElementById('inputWord').style.backgroundColor = inverseColor;
+            document.getElementById('inputWord').style.color = color;
+            document.getElementById('title').style.color = inverseColor;
+        }
+
+        // Metin kutusuna emoji ve noktalama işaretlerini engeller
+        function preventNonAlphanumeric(event) {
+            var key = event.keyCode || event.charCode;
+            // 65-90 arası (A-Z), 97-122 arası (a-z) harf kodları ve 48-57 arası (0-9) sayı kodlarına izin verilir
+            if ((key >= 65 && key <= 90) || (key >= 97 && key <= 122) || (key >= 48 && key <= 57)) {
+                return true;
+            } else {
+                event.preventDefault();
+                return false;
+            }
+        }
+
+        function getInverseColor(color) {
+            var hex = color.slice(1);
+            var r = parseInt(hex.substr(0, 2), 16);
+            var g = parseInt(hex.substr(2, 2), 16);
+            var b = parseInt(hex.substr(4, 2), 16);
+            var invertedR = 255 - r;
+            var invertedG = 255 - g;
+            var invertedB = 255 - b;
+            return `rgb(${invertedR},${invertedG},${invertedB})`;
+        }
+
+        function showPlaceholder() {
+            var inputElement = document.getElementById('inputWord');
+            if (inputElement.value === "") {
+                inputElement.value = "Enter Your Name";
+                inputElement.style.color = "#ccc";
+            }
+        }
+
+        function hidePlaceholder() {
+            var inputElement = document.getElementById('inputWord');
+            if (inputElement.value === "Enter Your Name") {
+                inputElement.value = "";
+                inputElement.style.color = "#000";
+            }
+        }
+
+        function downloadImage(resolution) {
+            var currentBackgroundColor = document.body.style.backgroundColor;
+            var width, height;
+
+            if (resolution === "720x1280") {
+                width = 720;
+                height = 1280;
+            } else if (resolution === "1920x1080") {
+                width = 1920;
+                height = 1080;
+            }
+
+            var canvas = document.createElement("canvas");
+            canvas.width = width;
+            canvas.height = height;
+
+            var ctx = canvas.getContext("2d");
+            ctx.fillStyle = currentBackgroundColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            var imgURL = canvas.toDataURL("image/png");
+
+            var downloadLink = document.createElement("a");
+            downloadLink.href = imgURL;
+            downloadLink.download = "background_image_" + resolution + ".png";
+            downloadLink.style.display = "none";
+            document.body.appendChild(downloadLink);
+
+            downloadLink.click();
+
+            document.body.removeChild(downloadLink);
+        }
+
+        function openDonatePopup() {
+            window.location.href = "https://hydrokinpay.netlify.app/";
+        }
+
+        // Metin kutusuna girilen metni otomatik olarak büyük harfe çevir
+        function capitalizeText() {
+            var inputElement = document.getElementById('inputWord');
+            inputElement.value = inputElement.value.toUpperCase();
+        }
+    </script>
+</head>
+<body style="background-color: rgb(0, 0, 0);">
+    <!-- Donate Button -->
+    <div id="donateButton">
+        <a href="https://hydrokinpay.netlify.app/" onclick="openDonatePopup()">Donate</a>
+    </div>
+
+    <div id="inputContainer">
+        <h1 id="title" style="color: rgb(255, 255, 255);">What is Your Color</h1>
+        <input
+            type="text"
+            id="inputWord"
+            placeholder="Enter your Name"
+            oninput="convertToHexColor(); capitalizeText();"
+            onkeypress="preventNonAlphanumeric(event);"
+            onfocus="hidePlaceholder()"
+            onblur="showPlaceholder()"
+            style="background-color: rgb(255, 255, 255); color: rgb(204, 204, 204);"
+        >
+    </div>
+    <p id="hexColor"></p>
+
+    <!-- Download Buttons -->
+    <div id="downloadButtonContainer">
+        <button class="downloadButton" onclick="downloadImage('720x1280')">Download Wallpaper for phone</button>
+        <button class="downloadButton" onclick="downloadImage('1920x1080')">Download Wallpaper for pc</button>
+    </div>
+</body>
+</html>
