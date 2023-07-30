@@ -11,7 +11,7 @@ Generate vibrant background colors based on your name with the "Name Color" web 
 
 ## How to Use
 
-1. Go to [Name Color Web App](link-to-your-app) (replace `link-to-your-app` with the actual URL of your deployed app).
+1. Go to [Name Color Web App](https://namecolor.netlify.app/).
 2. Enter your name in the input field.
 3. Witness the color transformation!
 4. To keep your personalized background, download it using the provided options.
